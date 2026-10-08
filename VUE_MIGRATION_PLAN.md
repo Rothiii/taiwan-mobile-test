@@ -62,38 +62,38 @@ Catatan: jika ingin migrasi paling kecil, komponen dapat dimulai dari `App.vue`,
 
 ## 5. Pemetaan HTML Lama ke Vue
 
-| Bagian lama | Implementasi Vue |
-| --- | --- |
-| `.container` | Layout utama di `App.vue` |
-| `.header` dan cart icon | `AppHeader.vue` |
-| `.products-grid` | `ProductGrid.vue` dengan `v-for` |
-| `.product-card` | `ProductCard.vue` |
-| `.loading` | `LoadingState.vue` dengan `v-if` |
-| Cart sidebar | `CartSidebar.vue` |
-| Item keranjang | `CartItem.vue` dengan `v-for` |
-| `products` | `ref()` atau state dari `useProducts()` |
-| `cart` | state terpusat dari `useCart()` |
-| `renderProducts()` | rendering deklaratif Vue |
-| `updateCartDisplay()` | `computed()` dan binding template |
-| `toggleCart()` | event handler `@click` |
-| `addToCart()` | method composable `addItem()` |
-| `updateQuantity()` | method composable `updateQuantity()` |
-| `checkout()` | method composable atau handler `App.vue` |
-| `window.load` | `onMounted()` |
-| event click global | `onMounted()` dan `onBeforeUnmount()` |
+| Bagian lama             | Implementasi Vue                         |
+| ----------------------- | ---------------------------------------- |
+| `.container`            | Layout utama di `App.vue`                |
+| `.header` dan cart icon | `AppHeader.vue`                          |
+| `.products-grid`        | `ProductGrid.vue` dengan `v-for`         |
+| `.product-card`         | `ProductCard.vue`                        |
+| `.loading`              | `LoadingState.vue` dengan `v-if`         |
+| Cart sidebar            | `CartSidebar.vue`                        |
+| Item keranjang          | `CartItem.vue` dengan `v-for`            |
+| `products`              | `ref()` atau state dari `useProducts()`  |
+| `cart`                  | state terpusat dari `useCart()`          |
+| `renderProducts()`      | rendering deklaratif Vue                 |
+| `updateCartDisplay()`   | `computed()` dan binding template        |
+| `toggleCart()`          | event handler `@click`                   |
+| `addToCart()`           | method composable `addItem()`            |
+| `updateQuantity()`      | method composable `updateQuantity()`     |
+| `checkout()`            | method composable atau handler `App.vue` |
+| `window.load`           | `onMounted()`                            |
+| event click global      | `onMounted()` dan `onBeforeUnmount()`    |
 
 ## 6. Desain State
 
 State utama di `App.vue` atau composable:
 
 ```js
-const products = ref([])
-const cart = ref([])
-const searchKeyword = ref('')
-const isCartOpen = ref(false)
-const isLoading = ref(false)
-const isCheckingOut = ref(false)
-const errorMessage = ref('')
+const products = ref([]);
+const cart = ref([]);
+const searchKeyword = ref("");
+const isCartOpen = ref(false);
+const isLoading = ref(false);
+const isCheckingOut = ref(false);
+const errorMessage = ref("");
 ```
 
 Computed yang diperlukan:
