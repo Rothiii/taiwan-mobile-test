@@ -24,10 +24,12 @@ const emit = defineEmits([
 			@click="emit('close')"
 	/></Transition>
 	<aside
+		id="cart-drawer"
 		class="cart-drawer"
 		:class="{ 'is-open': open }"
 		aria-label="購物車"
 		:aria-hidden="!open"
+		:inert="open ? undefined : ''"
 	>
 		<div class="drawer-header">
 			<div>

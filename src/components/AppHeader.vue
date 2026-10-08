@@ -1,6 +1,7 @@
 <script setup>
 defineProps({
 	cartItemCount: { type: Number, required: true },
+	cartOpen: { type: Boolean, default: false },
 	searchKeyword: { type: String, required: true },
 });
 const emit = defineEmits(["update:searchKeyword", "open-cart"]);
@@ -31,7 +32,8 @@ const emit = defineEmits(["update:searchKeyword", "open-cart"]);
 				class="cart-button"
 				type="button"
 				aria-label="開啟購物車"
-				:aria-expanded="cartItemCount > 0"
+				aria-controls="cart-drawer"
+				:aria-expanded="cartOpen"
 				@click="emit('open-cart')"
 			>
 				<svg aria-hidden="true" viewBox="0 0 24 24">

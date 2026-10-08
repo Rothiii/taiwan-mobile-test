@@ -28,8 +28,8 @@ Fitur yang harus tetap tersedia:
 - Vite.
 - Composition API dengan `<script setup>`.
 - JavaScript terlebih dahulu agar migrasi tetap sederhana.
+- Pinia untuk state keranjang yang dapat dikembangkan lintas halaman.
 - CSS modular per komponen atau satu stylesheet global yang terorganisasi.
-- Tidak perlu state management eksternal pada tahap awal karena state hanya digunakan oleh satu halaman.
 
 ## 4. Struktur File Target
 
@@ -50,8 +50,9 @@ src/
     LoadingState.vue
     ErrorState.vue
   composables/
-    useCart.js
     useProducts.js
+  stores/
+    cart.js
   assets/
     images/
   styles/
@@ -62,29 +63,29 @@ Catatan: jika ingin migrasi paling kecil, komponen dapat dimulai dari `App.vue`,
 
 ## 5. Pemetaan HTML Lama ke Vue
 
-| Bagian lama             | Implementasi Vue                         |
-| ----------------------- | ---------------------------------------- |
-| `.container`            | Layout utama di `App.vue`                |
-| `.header` dan cart icon | `AppHeader.vue`                          |
-| `.products-grid`        | `ProductGrid.vue` dengan `v-for`         |
-| `.product-card`         | `ProductCard.vue`                        |
-| `.loading`              | `LoadingState.vue` dengan `v-if`         |
-| Cart sidebar            | `CartSidebar.vue`                        |
-| Item keranjang          | `CartItem.vue` dengan `v-for`            |
-| `products`              | `ref()` atau state dari `useProducts()`  |
-| `cart`                  | state terpusat dari `useCart()`          |
-| `renderProducts()`      | rendering deklaratif Vue                 |
-| `updateCartDisplay()`   | `computed()` dan binding template        |
-| `toggleCart()`          | event handler `@click`                   |
-| `addToCart()`           | method composable `addItem()`            |
-| `updateQuantity()`      | method composable `updateQuantity()`     |
-| `checkout()`            | method composable atau handler `App.vue` |
-| `window.load`           | `onMounted()`                            |
-| event click global      | `onMounted()` dan `onBeforeUnmount()`    |
+| Bagian lama             | Implementasi Vue                           |
+| ----------------------- | ------------------------------------------ |
+| `.container`            | Layout utama di `App.vue`                  |
+| `.header` dan cart icon | `AppHeader.vue`                            |
+| `.products-grid`        | `ProductGrid.vue` dengan `v-for`           |
+| `.product-card`         | `ProductCard.vue`                          |
+| `.loading`              | `LoadingState.vue` dengan `v-if`           |
+| Cart sidebar            | `CartSidebar.vue`                          |
+| Item keranjang          | `CartItem.vue` dengan `v-for`              |
+| `products`              | `ref()` atau state dari `useProducts()`    |
+| `cart`                  | state terpusat dari Pinia `useCartStore()` |
+| `renderProducts()`      | rendering deklaratif Vue                   |
+| `updateCartDisplay()`   | `computed()` dan binding template          |
+| `toggleCart()`          | event handler `@click`                     |
+| `addToCart()`           | action Pinia `addItem()`                   |
+| `updateQuantity()`      | action Pinia `updateQuantity()`            |
+| `checkout()`            | method composable atau handler `App.vue`   |
+| `window.load`           | `onMounted()`                              |
+| event click global      | `onMounted()` dan `onBeforeUnmount()`      |
 
 ## 6. Desain State
 
-State utama di `App.vue` atau composable:
+State utama di `App.vue`, composable produk, dan Pinia store:
 
 ```js
 const products = ref([]);
@@ -144,7 +145,7 @@ Data produk tetap menggunakan bentuk:
 
 ### Tahap 4: Memindahkan logika keranjang
 
-1. Membuat `useCart.js`.
+1. Membuat Pinia store `src/stores/cart.js`.
 2. Mengimplementasikan `addItem(product)`.
 3. Mengimplementasikan `removeItem(productId)` bila diperlukan.
 4. Mengimplementasikan `updateQuantity(productId, change)`.
@@ -155,7 +156,7 @@ Data produk tetap menggunakan bentuk:
 ### Tahap 5: Membuat sidebar keranjang
 
 1. Membuat `CartSidebar.vue`.
-2. Mengirim state keranjang melalui props atau composable.
+2. Mengirim state keranjang melalui props dari Pinia store.
 3. Mengirim event `close`, `increase`, `decrease`, dan `checkout`.
 4. Menampilkan empty state dengan `v-if`.
 5. Menambahkan tombol aksesibel dengan label yang jelas.
@@ -280,7 +281,7 @@ Events:
 3. Uji viewport desktop, tablet, dan mobile.
 4. Jalankan `npm run build`.
 5. Periksa console browser untuk error Vue, asset, dan event listener.
-6. Tambahkan unit test untuk `useCart()` jika logika keranjang mulai berkembang.
+6. Tambahkan unit test untuk `useCartStore()` jika logika keranjang mulai berkembang.
 
 ## 11. Hasil Akhir yang Diharapkan
 

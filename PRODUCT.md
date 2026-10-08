@@ -99,7 +99,7 @@ Termasuk:
 
 - Katalog lokal.
 - Search lokal.
-- Cart state lokal melalui composable `useCart()`.
+- Cart state lokal melalui Pinia store `useCartStore()`.
 - Simulasi loading dan checkout.
 - Responsive layout.
 - Smoke test untuk loading, katalog, dan add-to-cart.
@@ -113,7 +113,6 @@ Belum termasuk:
 - Pengiriman dan perhitungan ongkir nyata.
 - Persistence cart ke localStorage.
 - Admin dashboard.
-- Pinia atau state management global.
 
 ## 8. Acceptance Criteria
 

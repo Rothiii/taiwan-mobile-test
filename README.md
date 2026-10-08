@@ -25,7 +25,7 @@ Taiwan Mobile adalah storefront sederhana berbasis Vue 3 untuk menampilkan produ
 - Vitest dan Vue Test Utils untuk smoke test.
 - CSS biasa tanpa UI framework.
 
-State keranjang dikelola oleh composable `src/composables/useCart.js` menggunakan `ref()` dan `computed()`. Untuk aplikasi satu halaman ini, Pinia atau Vuex belum diperlukan.
+State keranjang dikelola oleh Pinia store `src/stores/cart.js` menggunakan state, getters, dan actions. Vuex tidak digunakan karena Pinia adalah pilihan resmi dan lebih ringan untuk Vue 3.
 
 ## Menjalankan Project
 
@@ -56,8 +56,9 @@ src/
     ProductCard.vue       # Tampilan satu produk
     ProductGrid.vue       # Daftar produk dan empty state
   composables/
-    useCart.js            # State dan operasi keranjang
     useProducts.js        # Loading katalog produk
+  stores/
+    cart.js               # Pinia state dan operasi keranjang
   data/
     products.js           # Data produk lokal
   styles.css              # Style global dan responsive layout
@@ -69,7 +70,7 @@ src/
 2. `useProducts()` menampilkan loading selama simulasi pemuatan katalog.
 3. Katalog ditampilkan melalui `ProductGrid` dan `ProductCard`.
 4. Search keyword memfilter produk secara reactive dengan `computed()`.
-5. Saat produk ditambahkan, `useCart()` memperbarui item dan total kuantitas.
+5. Saat produk ditambahkan, `useCartStore()` memperbarui item dan total kuantitas.
 6. Cart drawer menampilkan item, harga, dan tombol quantity.
 7. Checkout atau penghapusan item meminta konfirmasi melalui native HTML `<dialog>`.
 8. Checkout yang dikonfirmasi menjalankan simulasi dua detik, lalu mengosongkan keranjang.
@@ -79,4 +80,4 @@ src/
 - Data produk saat ini bersifat lokal di `src/data/products.js`.
 - Checkout masih simulasi dan belum terhubung ke backend atau payment gateway.
 - Gambar produk menggunakan URL eksternal.
-- Persistence keranjang, autentikasi, routing, dan state management global belum diperlukan untuk scope saat ini.
+- Persistence keranjang, autentikasi, dan routing belum diperlukan untuk scope saat ini.

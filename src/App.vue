@@ -1,26 +1,22 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { storeToRefs } from "pinia";
 import AppHeader from "./components/AppHeader.vue";
 import CartSidebar from "./components/CartSidebar.vue";
 import ProductGrid from "./components/ProductGrid.vue";
-import { useCart } from "./composables/useCart";
 import { useProducts } from "./composables/useProducts";
+import { useCartStore } from "./stores/cart";
 
 const {
 	products,
 	isLoading,
 	errorMessage: productsError,
 	loadProducts,
+	cancelLoad,
 } = useProducts();
-const {
-	items,
-	cartItemCount,
-	cartTotal,
-	addItem,
-	updateQuantity,
-	removeItem,
-	clearCart,
-} = useCart();
+const cartStore = useCartStore();
+const { items, cartItemCount, cartTotal } = storeToRefs(cartStore);
+const { addItem, updateQuantity, removeItem, clearCart } = cartStore;
 const searchKeyword = ref("");
 const isCartOpen = ref(false);
 const isCheckingOut = ref(false);
@@ -29,6 +25,7 @@ const checkoutError = ref("");
 const confirmationDialog = ref(null);
 const confirmation = ref({ type: "", item: null });
 const toastTimer = ref(null);
+const checkoutTimer = ref(null);
 
 const filteredProducts = computed(() => {
 	const keyword = searchKeyword.value.trim().toLocaleLowerCase();
@@ -81,7 +78,8 @@ const startCheckout = () => {
 
 	isCheckingOut.value = true;
 	checkoutError.value = "";
-	window.setTimeout(() => {
+	checkoutTimer.value = window.setTimeout(() => {
+		checkoutTimer.value = null;
 		clearCart();
 		isCheckingOut.value = false;
 		isCartOpen.value = false;
@@ -113,6 +111,8 @@ onMounted(() => {
 onBeforeUnmount(() => {
 	document.removeEventListener("keydown", closeOnEscape);
 	window.clearTimeout(toastTimer.value);
+	window.clearTimeout(checkoutTimer.value);
+	cancelLoad();
 });
 </script>
 
@@ -120,6 +120,7 @@ onBeforeUnmount(() => {
 	<div class="app-shell">
 		<AppHeader
 			:cart-item-count="cartItemCount"
+			:cart-open="isCartOpen"
 			:search-keyword="searchKeyword"
 			@update:search-keyword="searchKeyword = $event"
 			@open-cart="showCart"
